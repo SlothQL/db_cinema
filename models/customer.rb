@@ -39,7 +39,7 @@ class Customer
     def self.all()
         sql = "SELECT * FROM customers"
         returned_customers = SqlRunner.run(sql)
-        return returned_customers.map { |customer| Customer.new(customer) }
+        return self.map_data(returned_customers)
     end
 
     def films()
@@ -78,8 +78,10 @@ class Customer
 
     def buy_ticket(screening)
         return if !enough_money?(screening)
+        return if !screening.free_space?()
         new_ticket = Ticket.new({'customer_id' => @id, 'screening_id' => screening.id})
         new_ticket.save()
+        screening.decrease_available_seats()
         film_price = screening.film_price() 
         return @funds -= film_price
     end
