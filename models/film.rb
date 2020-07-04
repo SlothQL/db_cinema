@@ -43,7 +43,9 @@ class Film
 
     def customers()
         sql = "SELECT customers.* FROM customers
-        INNER JOIN tickets ON tickets.customer_id = customers.id WHERE film_id = $1"
+        INNER JOIN tickets ON tickets.customer_id = customers.id 
+        INNER JOIN screenings ON screenings.id = tickets.screening_id
+        WHERE film_id = $1"
         values = [@id]
         all_customers = SqlRunner.run(sql, values)
         return Customer.map_data(all_customers)
@@ -54,9 +56,30 @@ class Film
         return result
     end
 
+    # extension
+
     def count_customers()
         customers = self.customers()
         return customers.count()
     end
+
+    def tickets()
+        sql = "SELECT tickets.* FROM tickets  
+        INNER JOIN screenings on screenings.id = tickets.screening_id 
+        WHERE film_id = $1"
+        values = [@id]
+        all_tickets = SqlRunner.run(sql, values)
+        return Ticket.map_data(all_tickets)
+    end
+
+    def most_popular_time()
+        all_screening_ids = []
+        all_tickets = self.tickets()
+        all_tickets.map { |ticket| all_screening_ids.push(ticket.screening_id)}
+        favourite_screening_id = all_screening_ids.max_by { |i| all_screening_ids.count(i) }
+        return Screening.find_by_id(favourite_screening_id).time
+    end
+
+    # https://medium.com/better-programming/two-ways-of-finding-the-element-that-occurs-the-most-in-an-array-with-ruby-7fb484ea1a6d
 
 end
