@@ -54,5 +54,9 @@ class Film
         return result
     end
 
+    def count_customers()
+        customers = self.customers()
+        return customers.count()
+    end
 
 end

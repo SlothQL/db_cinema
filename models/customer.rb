@@ -55,4 +55,29 @@ class Customer
         return result
     end
 
+    # extension
+
+    def tickets()
+        sql = "SELECT * FROM tickets WHERE customer_id = $1"
+        values = [@id]
+        ticket_data = SqlRunner.run(sql, values)
+        return ticket_data.map { |ticket| Ticket.new(ticket) }
+    end
+
+    def number_of_tickets()
+        tickets = self.tickets()
+        return tickets.count()
+    end
+
+    def enough_money?(film)
+        return @funds >= film.price
+    end
+
+    def buy_ticket(film)
+        return if !enough_money?(film)
+        new_ticket = Ticket.new({'customer_id' => @id, 'film_id' => film.id})
+        new_ticket.save()
+        return @funds -= film.price
+    end
+
 end

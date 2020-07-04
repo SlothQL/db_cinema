@@ -11,10 +11,12 @@ Film.delete_all()
 customer1 = Customer.new({'name' => 'Ben', 'funds' => 50})
 customer2 = Customer.new({'name' => 'Alina', 'funds' => 35})
 customer3 = Customer.new({'name' => 'Julien', 'funds' => 13})
+customer4 = Customer.new({'name' => 'Gabi', 'funds' => 5})
 
 customer1.save()
 customer2.save()
 customer3.save()
+customer4.save()
 
 customer1.name = "Benjamin"
 customer1.update()
@@ -28,13 +30,8 @@ film2.save()
 film1.price = 8
 film1.update()
 
-ticket1 = Ticket.new({'customer_id' => customer1.id, 'film_id' => film1.id})
-ticket2 = Ticket.new({'customer_id' => customer2.id, 'film_id' => film1.id})
-ticket3 = Ticket.new({'customer_id' => customer3.id, 'film_id' => film2.id})
-
-ticket1.save()
-ticket2.save()
-ticket3.save()
+customer1.buy_ticket(film1)
+customer4.buy_ticket(film1)
 
 binding.pry
 nil
