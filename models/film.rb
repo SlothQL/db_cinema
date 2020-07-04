@@ -35,6 +35,11 @@ class Film
         SqlRunner.run(sql, values)
     end
 
+    def self.map_data(data)
+        result = data.map { |film| Film.new(film) }
+        return result
+    end
+
     def self.all()
         sql = "SELECT * FROM films"
         returned_films = SqlRunner.run(sql)
@@ -49,11 +54,6 @@ class Film
         values = [@id]
         all_customers = SqlRunner.run(sql, values)
         return Customer.map_data(all_customers)
-    end
-
-    def self.map_data(data)
-        result = data.map { |film| Film.new(film) }
-        return result
     end
 
     # extension

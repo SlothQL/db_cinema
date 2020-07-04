@@ -36,15 +36,15 @@ class Ticket
         SqlRunner.run(sql, values)
     end
 
+    def self.map_data(data)
+        result = data.map { |ticket| Ticket.new(ticket) }
+        return result
+    end
+
     def self.all()
         sql = "SELECT * FROM tickets"
         returned_tickets = SqlRunner.run(sql)
         return self.map_data(returned_tickets)
-    end
-
-    def self.map_data(data)
-        result = data.map { |ticket| Ticket.new(ticket) }
-        return result
     end
 
 end
