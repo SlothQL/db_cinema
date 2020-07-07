@@ -83,7 +83,8 @@ class Customer
         new_ticket.save()
         screening.decrease_available_seats()
         film_price = screening.film_price() 
-        return @funds -= film_price
+        @funds -= film_price
+        update()
     end
 
 end
